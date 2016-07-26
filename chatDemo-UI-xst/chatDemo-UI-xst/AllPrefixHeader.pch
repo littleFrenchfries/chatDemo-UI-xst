@@ -1,0 +1,184 @@
+//
+//  AllPrefixHeader.pch
+//  chatDemo-UI-xst
+//
+//  Created by shinyhub on 16/7/21.
+//  Copyright © 2016年 shinyhub. All rights reserved.
+//
+
+#ifndef AllPrefixHeader_pch
+#define AllPrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+#ifdef __OBJC__
+//头文件的引用__OBJC__
+#import "UIColor+HexColor.h"
+#import "EMSDK.h"
+#import "EaseUI.h"
+#import "XSTNetworking.h"
+#import "MJRefresh.h"
+#import "UIViewController+XSTabBarControllerManager.h"
+#import "XHCacheManager.h"
+#import "PublicControlMaker.h"
+#import "UITextField+TextFieldLeftOrRightView.h"
+#import "UIView+MJExtension.h"
+
+
+//屏幕宽度
+#define kScreenW [UIScreen mainScreen].bounds.size.width
+//屏幕高度
+#define kScreenH [UIScreen mainScreen].bounds.size.height
+
+//宏定义全局并发队列
+#define global_quque    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+//宏定义主队列
+#define main_queue       dispatch_get_main_queue()
+
+/*************************
+ *  颜色设定区域
+ *************************/
+/**
+ *  背景颜色
+ */
+#define BACKVIEWCOLOR @"#F0F0F5"
+/**
+ *  正标题文字颜色
+ */
+#define TITLECOLOR @"#2D3236"
+/**
+ *  副标题文字颜色
+ *
+ */
+#define SUBTITLECOLOR @"#A2A4A6"
+/**
+ *  输入框文字颜色
+ *
+ */
+#define TEXTFILEDTEXTCOLOR @"#A2A4A6"
+/**
+ *  输入框默认提示信息文字颜色
+ *
+ */
+#define PLAYHODLETEXTCOLOR @"#CACACC"
+/**
+ *  可操作按钮颜色
+ *
+ */
+#define ACTIONBUTTONCOLOR @"#0084E8"
+/**
+ *  禁用按钮颜色
+ *
+ */
+#define UNACTIONBUTTONCOLOR @"#DDDDDD"
+/**
+ *  处理中按钮颜色
+ *
+ */
+#define INGACTIONBUTTONCOLOR @"#00A2FF"
+/**
+ * 禁用按钮字体颜色
+ *
+ */
+#define UNACTIONBUTTONTEXTCOLOR @"#ADADAD"
+/**
+ *  设置导航栏背景颜色
+ *
+ */
+#define NAVI_BAR_TINT_COLOR @"#333333"
+/**
+ * 任务管理中涉及状态背景颜色以及文字定义
+ *
+ */
+//进行中 背景颜色
+#define ZT_BG_JXZ @"#d7f7e1"
+//进行中 文字颜色
+#define ZT_WZ_JXZ @"#27B517"
+//待验收 背景颜色
+#define ZT_BG_DYS @"#ceeaff"
+//待验收 文字颜色
+#define ZT_WZ_DYS @"#0088f0"
+//结束   背景颜色
+#define ZT_BG_JS  @"#fce3dc"
+//结束   文字颜色
+#define ZT_WZ_JS  @"#fe3e00"
+//撤销   背景颜色
+#define ZT_BG_CX  @"#e8e8e8"
+//撤销   文字颜色
+#define ZT_WZ_CX  @"#a2a4a6"
+//任务列表头Cell颜色
+#define RW_LB_HEAD @"#f8f8f8"
+
+//所有搜索框背景色
+#define SSK_BG @"#f0f0f0"
+/*************************
+ *  字体设定区域
+ *************************/
+/**
+ *  说明文字大小
+ */
+#define BODYFOND 12.0
+
+/**
+ *  正标题字体大小
+ *
+ */
+#define TITLEFOND 14.0
+
+/**
+ *  副标题字体大小
+ *
+ */
+#define SUBTITLEFOND 10.0
+
+/**
+ *  输入框文字大小
+ */
+#define TEXTFEILDFOND 14.0
+
+/**
+ *  输入框默认提示信息文字大小
+ *
+ */
+#define PLAYHODLEFOND 12.0
+
+/**
+ *  标题栏上的文字的大小
+ */
+#define MAINTITLEFOND 17.0
+
+/**
+ *  针对需要强调凸显字体大小
+ */
+#define SPECIALFOND 25.0
+
+
+/**
+ *  菜单cell的高度&&登录按钮
+ *
+ */
+#define CELLHEIGHT 44.0
+
+/**
+ *  上下左右 之间的间距(如有差距 请自行*n)例如距离是10就*2 15就*3
+ */
+#define SPACING 5.0
+
+
+#define XTLocalizedString @"Localizable"
+
+/**
+ *  自定义输出
+ *
+ */
+#ifdef DEBUG
+#define DLog( s, ... ) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DLog( s, ... )
+#endif
+
+#endif
+
+#endif /* AllPrefixHeader_pch */
