@@ -9,7 +9,8 @@
 
 #import "RegisterViewController.h"
 #import "VerificationCodeButton.h"
-@interface RegisterViewController ()
+#import "SMSSDK.h"
+@interface RegisterViewController ()<UITextFieldDelegate>
 
 @property (strong, nonatomic)UITextField * phoneTextField;
 
@@ -85,14 +86,44 @@
 }
 
 -(void)footerBtnClick:(UIButton *)btn{
+    
     //开始注册
     EMError *error = [[EMClient sharedClient] registerWithUsername:self.phoneTextField.text password:self.passwdOneTextField.text];
     if (error==nil) {
         DLog(@"注册成功");
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
     }else{
         DLog(@"%@",error.errorDescription);
+        [self showHint:@"注册失败！"];
     }
+}
+
+
+-(void)veriBtnClick:(VerificationCodeButton *)btn{
+    if (self.phoneTextField.text.length == 0) {
+        [self showHint:@"请输入手机号!"];
+        return;
+    }
+    /**
+     *  @from                    v1.1.1
+     *  @brief                   获取验证码(Get verification code)
+     *
+     *  @param method            获取验证码的方法(The method of getting verificationCode)
+     *  @param phoneNumber       电话号码(The phone number)
+     *  @param zone              区域号，不要加"+"号(Area code)
+     *  @param customIdentifier  自定义短信模板标识 该标识需从官网http://www.mob.com上申请，审核通过后获得。(Custom model of SMS.  The identifier can get it  from http://www.mob.com  when the application had approved)
+     *  @param result            请求结果回调(Results of the request)
+     */
+    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.phoneTextField.text zone:@"86" customIdentifier:nil result:^(NSError *error) {
+        if (!error) {
+            DLog(@"获取验证码成功");
+            [btn startTimer];
+        } else {
+            DLog(@"错误信息：%@",error);
+            [self showHint:error.description];
+        }
+    }];
+    
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -119,6 +150,32 @@
     return YES;
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField == self.codeTextField) {
+        /**
+         * @from               v1.1.1
+         * @brief              提交验证码(Commit the verification code)
+         *
+         * @param code         验证码(Verification code)
+         * @param phoneNumber  电话号码(The phone number)
+         * @param zone         区域号，不要加"+"号(Area code)
+         * @param result       请求结果回调(Results of the request)
+         */
+        [SMSSDK commitVerificationCode:self.codeTextField.text phoneNumber:self.phoneTextField.text zone:@"86" result:^(NSError *error) {
+            
+            if (!error) {
+                
+                DLog(@"验证成功");
+                [self showHint:@"验证成功！"];
+            }
+            else
+            {
+                DLog(@"错误信息：%@",error);
+                [self showHint:@"验证失败！"];
+            }
+        }];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -14,4 +14,8 @@
 
 -(void)addTargitWith:(id)delegate action:(SEL)selected;
 
+- (void)startTimer;
+
+
+- (void)stopTimer;
 @end

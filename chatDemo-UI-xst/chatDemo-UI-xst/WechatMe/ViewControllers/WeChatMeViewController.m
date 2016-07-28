@@ -16,6 +16,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.title = NSLocalizedStringFromTable(@"Me", XTLocalizedString, @"我");
+    
     UIButton * btn = [PublicControlMaker createButtonWithTitleFrame:CGRectMake(100, 100, 100, 100) title:@"注销"];
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];

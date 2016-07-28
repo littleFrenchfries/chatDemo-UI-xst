@@ -18,6 +18,10 @@
 
 @property (strong, nonatomic)UILabel * label;
 
+@property (assign, nonatomic)id delegate;
+
+@property (assign, nonatomic)SEL selected;
+
 @end
 
 @implementation VerificationCodeButton
@@ -50,12 +54,16 @@
 
 
 -(void)btnClick:(UIButton *)btn{
-    btn.enabled = NO;
-    [self startTimer];
-    
+   
+    if ([self.delegate respondsToSelector:self.selected]) {
+        IMP imp =[self.delegate methodForSelector:self.selected];
+        void (*func)(id,SEL,id) =(void *)imp;
+        func(self.delegate,self.selected,self);
+    }
 }
 #pragma mark- --------定时器相关方法--------
 - (void)startTimer {
+     self.btn.enabled = NO;
     self.second = 60;
     //如果定时器已开启，先停止再重新开启
     [self.btn setTitle:@"" forState:UIControlStateNormal];
@@ -81,6 +89,11 @@
     if (self.second == 0) {
         [self stopTimer];
     }
+}
+
+-(void)addTargitWith:(id)delegate action:(SEL)selected{
+    self.delegate = delegate;
+    self.selected = selected;
 }
 
 /*

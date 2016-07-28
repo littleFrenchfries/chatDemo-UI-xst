@@ -14,7 +14,7 @@ typedef NS_ENUM(NSUInteger,ApplyStyle){
     ApplyStyleJoinGroup,
 };
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,EMChatManagerDelegate,EMGroupManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

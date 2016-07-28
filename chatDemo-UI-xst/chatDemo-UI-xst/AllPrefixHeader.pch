@@ -25,7 +25,7 @@
 #import "PublicControlMaker.h"
 #import "UITextField+TextFieldLeftOrRightView.h"
 #import "UIView+MJExtension.h"
-
+#import "UILabel+AutoSizeLabel.h"
 
 //屏幕宽度
 #define kScreenW [UIScreen mainScreen].bounds.size.width
@@ -178,6 +178,17 @@
 #else
 #define DLog( s, ... )
 #endif
+
+/**
+ *  使用宏忽略警告
+ */
+#define SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
 
 #endif
 

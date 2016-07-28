@@ -1,22 +1,23 @@
 //
-//  WeChatFindViewController.m
+//  GroupDetailViewController.m
 //  chatDemo-UI-xst
 //
-//  Created by shinyhub on 16/7/22.
+//  Created by shinyhub on 16/7/27.
 //  Copyright © 2016年 shinyhub. All rights reserved.
 //
 
-#import "WeChatFindViewController.h"
+#import "GroupDetailViewController.h"
 
-@interface WeChatFindViewController ()
+@interface GroupDetailViewController ()
 
 @end
 
-@implementation WeChatFindViewController
+@implementation GroupDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = NSLocalizedStringFromTable(@"Discover", XTLocalizedString, @"发现");
+    self.navigationItem.title = @"聊天信息";
+    
     // Do any additional setup after loading the view.
 }
 

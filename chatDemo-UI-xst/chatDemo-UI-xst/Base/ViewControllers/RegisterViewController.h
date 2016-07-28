@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-
+#import "VerificationCodeButton.h"
 @interface RegisterViewController : BaseViewController
 
 @end

@@ -14,6 +14,7 @@
 #import "XSTTabBarViewController.h"
 #import "LoadingViewController.h"
 #import "IQKeyboardManager.h"
+#import "SMSSDK.h"
 @interface AppDelegate ()<EMClientDelegate,EMContactManagerDelegate>
 
 @end
@@ -69,11 +70,19 @@
 
 
 -(void)setBassSetting:(UIApplication *)application WithOptions:(NSDictionary *)launchOptions{
+    /**
+     *  键盘管理者设置
+     */
     IQKeyboardManager * manager =[IQKeyboardManager sharedManager];
     manager.enable = YES;
     manager.shouldResignOnTouchOutside = YES;
     manager.shouldToolbarUsesTextFieldTintColor = YES;
     manager.enableAutoToolbar = NO;
+    
+    
+    /**
+     *  环信设置
+     */
     [[EaseSDKHelper shareHelper] easemobApplication:application
                       didFinishLaunchingWithOptions:launchOptions
                                              appkey:@"wangxu19921004#xsthttpconnect"
@@ -82,7 +91,19 @@
     //添加回调监听代理:
     [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    
+    //EMChatManagerDelegate
+    
+    
+    //初始化应用，appKey和appSecret从后台申请得
+    [SMSSDK registerApp:@"15583163e8de0"
+             withSecret:@"0eda40b132eb2242b43c5c583da03637"];
+    
+    //注册群组回调
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
 }
+
+#pragma mark ------EMSDKDelegate__Login------
 
 /*!
  *  自动登录返回结果
@@ -120,6 +141,7 @@
  *  当前登录账号在其它设备登录时会接收到该回调
  */
 - (void)didLoginFromOtherDevice{
+    [self pushToLoginViewController];
     DLog(@"账号在其他设备上登录");
 }
 
@@ -127,9 +149,11 @@
  *  当前登录账号已经被从服务器端删除时会收到该回调
  */
 - (void)didRemovedFromServer{
+    [self pushToLoginViewController];
     DLog(@"账号已删除");
 }
 
+#pragma mark ----------EMSDKDelegate__FriendsManager-------
 /*!
  *  \~chinese
  *  用户B申请加A为好友后，用户A会收到这个回调
@@ -151,7 +175,7 @@
     }
     
     if (!aMessage) {
-        aMessage = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), aUsername];
+        aMessage = [NSString stringWithFormat:@"%@ 想加您好友", aUsername];
     }
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aUsername, @"username":aUsername, @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleFriend]}];
     NSMutableArray * dataSource =  [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"applyCation"]];
@@ -162,11 +186,24 @@
         //发送本地推送
         UILocalNotification *notification = [[UILocalNotification alloc] init];
         notification.fireDate = [NSDate date]; //触发通知的时间
-        notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), aUsername];
-        notification.alertAction = NSLocalizedString(@"open", @"Open");
+        notification.alertBody = aMessage;
+        notification.alertAction = @"打开";
         notification.timeZone = [NSTimeZone defaultTimeZone];
     }
     
+}
+#pragma mark -------EMSDKDelegate__GroupManager
+/*!
+ @method
+ @brief 用户B设置了自动同意，用户A邀请用户B入群，SDK 内部进行同意操作之后，用户B接收到该回调
+ */
+- (void)didJoinedGroup:(EMGroup *)aGroup
+               inviter:(NSString *)aInviter
+               message:(NSString *)aMessage{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"groupid":aGroup.groupId,@"groupdetail":aGroup.subject}];
+    NSMutableArray * dataSource =  [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"applyCation"]];
+    [dataSource addObject:dic];
+    [[NSUserDefaults standardUserDefaults] setObject:dataSource forKey:@"applyCation"];
 }
 
 #pragma mark - App Delegate

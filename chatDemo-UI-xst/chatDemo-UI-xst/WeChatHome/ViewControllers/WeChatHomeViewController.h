@@ -8,6 +8,6 @@
 
 #import "BaseViewController.h"
 
-@interface WeChatHomeViewController : BaseViewController
+@interface WeChatHomeViewController : BaseViewController<EMGroupManagerDelegate>
 
 @end
